@@ -1,5 +1,5 @@
-import { Categoria, Producto } from "../models";
-import { request, response } from "express";
+const { Categoria } = require("../models");
+const { request, response } = require("express");
 
 async function get_all(req = request, res = response) {
   try {
@@ -39,10 +39,10 @@ async function get_by_pk(req = request, res = response) {
 }
 
 async function create(req = request, res = response) {
-  const { nombre } = req.body;
-  if (!nombre)
-    return res.status(400).json({ message: "el nombre es requerido" });
   try {
+    const { nombre } = req.body;
+    if (!nombre)
+      return res.status(400).json({ message: "el nombre es requerido" });
     const categoria = await Categoria.create({ nombre });
     return res.status(201).json({ message: "categoria creada con exito" });
   } catch (error) {

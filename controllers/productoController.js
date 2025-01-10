@@ -12,6 +12,7 @@ async function get_all(req, res) {
       return res.status(404).json({ message: "No se encontraron resultado" });
     return res.status(200).json(productos);
   } catch (error) {
+    console.error(error);
     return res
       .status(500)
       .json({ message: "Se produjo un error al obtener los productos" });
@@ -21,7 +22,7 @@ async function get_all(req, res) {
 async function get_by_pk(req, res) {
   const { id } = req.params;
   try {
-    const producto = await Producto.findAll({
+    const producto = await Producto.findOne({
       where: {
         activo: true,
         id,
@@ -60,15 +61,15 @@ async function get_by_cat_id(req, res) {
   }
 }
 
-async function create(req, res) {
-  const { nombre, descripcion, precio, idCategoria } = req.body;
-  if (!nombre || !descripcion || !precio || !idCategoria) {
-    return res.status(400).json({
-      message: "Llena los campos requeridos",
-      fields: ["nombre", "descirpcion", "precio", "idCategoria"],
-    });
-  }
+async function create(req = request, res = response) {
   try {
+    const { nombre, descripcion, precio, idCategoria } = req.body;
+    if (!nombre || !descripcion || !precio || !idCategoria) {
+      return res.status(400).json({
+        message: "Llena los campos requeridos",
+        fields: ["nombre", "descirpcion", "precio", "idCategoria"],
+      });
+    }
     const producto = Producto.create({
       nombre,
       descripcion,
