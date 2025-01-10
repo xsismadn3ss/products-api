@@ -1,7 +1,6 @@
-const app = require('./app');
+const app = require("./app");
+const config = require("./appConfig").app;
 
-app.listen(
-  app.get('port'), () =>{
-    console.log('Servidor iniciado ✅')
-  }
-)
+app.listen(config.port, () => {
+  console.log("Servidor iniciado ✅");
+});
