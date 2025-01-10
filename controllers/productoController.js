@@ -39,6 +39,27 @@ async function get_by_pk(req, res) {
   }
 }
 
+async function get_by_cat_id(req, res) {
+  const { id } = req.params;
+  try {
+    const producto = await Producto.findAll({
+      where: {
+        activo: true,
+        idCategoria: id,
+      },
+    });
+    if (!producto)
+      return res.status(404).json({ message: "No se ha encontrado" });
+    return res
+      .status(200)
+      .json({ message: "producto encontrado", producto: producto });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "se produjo un error al obtener el producto" });
+  }
+}
+
 async function create(req, res) {
   const { nombre, descripcion, precio, idCategoria } = req.body;
   if (!nombre || !descripcion || !precio || !idCategoria) {
@@ -120,6 +141,7 @@ async function on_delete(req, res) {
 module.exports = {
   get_all,
   get_by_pk,
+  get_by_cat_id,
   create,
   update,
   on_delete,
